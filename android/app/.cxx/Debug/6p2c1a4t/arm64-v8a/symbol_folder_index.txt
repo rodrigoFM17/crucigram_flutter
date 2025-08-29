@@ -1,0 +1,1 @@
+/home/rodrigo/Documentos/development/mobile/pdf_editor_tests/build/app/intermediates/cxx/Debug/6p2c1a4t/obj/arm64-v8a
