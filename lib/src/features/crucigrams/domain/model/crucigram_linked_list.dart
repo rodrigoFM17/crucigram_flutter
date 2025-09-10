@@ -11,24 +11,6 @@ class CrucigramLinkedList {
     required this.startingNode
   });
 
-  static Node setNextNode(
-    Word word, 
-    List<Word> words, 
-    Node? previousNode
-  ) {
-
-    final filteredWords = words.where((w) {return w != word;}).toList();
-
-    final newNode = Node(
-      word: word.value, 
-      orientation: Orientation.getRandomOrientation(), 
-      relation: word.getRandomRelation(), 
-      previous: previousNode, 
-      next: filteredWords.length >= 1 ? setNextNode(word, filteredWords) : null
-    );
-
-    return newNode;
-  }
 
   static Word getWordWithMoreRelations() {
     throw UnimplementedError();
@@ -38,9 +20,20 @@ class CrucigramLinkedList {
 
     final startingWord = getWordWithMoreRelations();
 
-    final startingNode = setNextNode()
+    final startingNode = Node(
+      word: startingWord,
+      relation: null,
+      orientation: Orientation.getRandomOrientation(), 
+      previous: null, 
+      next: null
+    );
+    startingNode.setRandomNodeRelation();
 
+    startingNode.setNextNode(
+      startingNode.relation!.word, 
+      words.map((w) { return w.value;}).toList()
+    );
 
-    return 
+    return CrucigramLinkedList(startingNode: startingNode);
   }
 }

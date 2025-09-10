@@ -7,6 +7,6 @@ class CrucigramTree {
 
   CrucigramTree({
     required this.root
-  })
+  });
   
 }

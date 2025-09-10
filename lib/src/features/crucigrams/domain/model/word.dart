@@ -23,7 +23,5 @@ class Word {
     );
   }
 
-  Relation getRandomRelation() {
-    throw UnimplementedError();
-  }
+  
 }

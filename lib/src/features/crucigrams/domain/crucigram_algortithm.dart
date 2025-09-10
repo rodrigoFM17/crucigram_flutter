@@ -177,7 +177,6 @@ class Crucigram {
 
     wordsForCrucigram.add(wordForCrucigram);
 
-    wordForCrucigram.
 
 
   }

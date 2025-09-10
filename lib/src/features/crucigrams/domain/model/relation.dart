@@ -3,7 +3,7 @@ import 'coordinates.dart';
 import 'word.dart';
 
 class Relation {
-  final Word word;
+  final String word;
   List<Coordinates> coordinates;
 
   Relation({
@@ -47,9 +47,7 @@ class Relation {
         });
       }
     });
-
     return coordinates;
-
   }
 
 
