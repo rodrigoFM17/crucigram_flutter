@@ -18,9 +18,8 @@ class CrucigramTree {
 
     Map<String, Coordinates> wordCoordinatesInMatrix = {};
     charactersMatrix = [];
-    Node currentNode = root;
-   root.executeInNodes(CrucigramTree.addWordToMatrix, charactersMatrix, wordCoordinatesInMatrix);
-   return charactersMatrix;
+    root.executeInNodes(CrucigramTree.addWordToMatrix, charactersMatrix, wordCoordinatesInMatrix);
+    return charactersMatrix;
 
   }
 
@@ -38,8 +37,9 @@ class CrucigramTree {
 
     print("currentWord: $currentWord");
     print("orientation: ${node.orientation}");
+    print("parentWord: ${node.parent?.value}");
     print("parentWordCoordinates: $parentWordCoordinates2");
-    print("wordCoordinates: $wordCoordinates2 \n\n");
+    print("wordCoordinates: $wordCoordinates2");
 
     if(charactersMatrix.isEmpty) {
       if(node.orientation == Orientation.horizontal) {
@@ -59,6 +59,9 @@ class CrucigramTree {
       int initialX = 0;
       int initialY = 0;
 
+      int finalX = 0;
+      int finalY = 0;
+
       if (node.orientation == Orientation.horizontal) {
 
         final diffLeft = wordCoordinates.y;
@@ -66,12 +69,20 @@ class CrucigramTree {
         int matrixDiffLeft = parentWordCoordinates.x - diffLeft;
         int matrixDiffRight = parentWordCoordinates.x + currentWord.length - diffLeft - xLength;
 
+        print("parentWordCoordinates: $parentWordCoordinates");
+        print("diffLeft: $diffLeft");
+        print("diffRight: $diffRight");
+        print("matrixDiffLeft: $matrixDiffLeft");
+        print("matrixDiffRight: $matrixDiffRight");
+        print("initialX: $initialX");
+        print("initialY: $initialY");
+
         // verificar que la matriz tiene espacio a la izquierda
         if(matrixDiffLeft < 0) {
           // si no anadir espacio rellenando con null
           charactersMatrix.forEach((row) {
             for(int i = 0; i < matrixDiffLeft.abs(); i++){
-              row.insert(0, null);
+              row.insert(0, null as String?);
             }
           });
           parentWordCoordinates.x += diffLeft.abs();
@@ -79,7 +90,7 @@ class CrucigramTree {
         if(matrixDiffRight > 0) {
           charactersMatrix.forEach((row) {
             for(int i = 0; i < matrixDiffRight; i++){
-              row.add(null);
+              row.add(null as String?);
             }
           });
         }
@@ -87,17 +98,8 @@ class CrucigramTree {
         initialX = parentWordCoordinates.x;
         initialY = parentWordCoordinates.y + wordCoordinates.x; 
 
-        charactersMatrix.forEach((row) {
-          print(row);
-        });
-        print("parentWordCoordinates: $parentWordCoordinates");
-        print(diffLeft);
-        print(diffRight);
-        print(matrixDiffLeft);
-        print(matrixDiffRight);
-        print(initialX);
-        print(initialY);
-        print("\n\n");
+        finalX = initialX - diffLeft;
+        finalY = initialY;
 
         // colocar caracteres a la izquierda
         for(int i = diffLeft; i > 0; i--) {
@@ -105,9 +107,11 @@ class CrucigramTree {
         }
 
         // colocar caracteres a la derecha
-        for(int i = wordCoordinates.x + 1; i < currentWord.length; i++) {
+        for(int i = wordCoordinates.y + 1; i < currentWord.length; i++) {
           charactersMatrix[initialY][initialX + i - wordCoordinates.y] = charactersList[i];
         }
+
+        
 
       } else {
         
@@ -115,6 +119,13 @@ class CrucigramTree {
         final diffBottom = currentWord.length - diffTop - 1;
         final matrixDiffTop = parentWordCoordinates.y - diffTop;
         final matrixDiffBottom = parentWordCoordinates.y + currentWord.length - diffTop - yLength;
+
+        
+
+        print("diffTop: $diffTop");
+        print("diffBottom: $diffBottom");
+        print("matrixDiffTop: $matrixDiffTop");
+        print("matrixDiffBottom: $matrixDiffBottom");
 
         if(matrixDiffTop < 0) {
           for(int i = 0; i < matrixDiffTop.abs(); i++) {
@@ -131,17 +142,11 @@ class CrucigramTree {
         initialX = parentWordCoordinates.x + wordCoordinates.x;
         initialY = parentWordCoordinates.y; 
 
-        charactersMatrix.forEach((row) {
-          print(row);
-        });
-        print("parentWordCoordinates: $parentWordCoordinates");
-        print(diffTop);
-        print(diffBottom);
-        print(matrixDiffTop);
-        print(matrixDiffBottom);
-        print(initialX);
-        print(initialY);
-        print("\n\n");
+        finalX = initialX;
+        finalY = parentWordCoordinates.y - diffTop;
+
+        print("initialX: $initialX");
+        print("initialY: $initialY");
 
         // colocar caracteres arriba
         for(int i = 1; i <= diffTop; i++) {
@@ -149,19 +154,21 @@ class CrucigramTree {
         }
 
         // colocar caracteres abajo
-        for(int i = diffBottom; i < currentWord.length; i++) {
-          charactersMatrix[initialY + i - wordCoordinates.y][initialX] = charactersList[i];
+        for(int i = 0; i <= diffBottom; i++) {
+          charactersMatrix[initialY + i][initialX] = charactersList[currentWord.length - 1 - diffBottom + i];
         }
 
         
+        
       }
 
-      wordCoordinatesInMatrix[currentWord] = Coordinates(x: initialX, y: initialY);
+      charactersMatrix.forEach((row) {
+        print(row);
+      });
+      print("\n\n");
 
 
-
-
-
+      wordCoordinatesInMatrix[currentWord] = Coordinates(x: finalX, y: finalY);
     }
   }
 
